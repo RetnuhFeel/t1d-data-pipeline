@@ -1,0 +1,10 @@
+timestamp,carbs_g,insulin_units,bolus_type
+2025-01-01 14:00:00,59,9.15,Meal Bolus
+2025-01-01 18:00:00,80,4.57,Correction Bolus
+2025-01-02 00:00:00,64,8.38,Meal Bolus
+2025-01-02 14:00:00,82,5.33,Meal Bolus
+2025-01-02 18:00:00,70,9.75,Correction Bolus
+2025-01-03 00:00:00,80,3.66,Meal Bolus
+2025-01-03 14:00:00,77,8.96,Meal Bolus
+2025-01-03 18:00:00,34,8.41,Meal Bolus
+2025-01-04 00:00:00,54,9.24,Meal Bolus
