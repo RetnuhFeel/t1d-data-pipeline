@@ -1,9 +1,14 @@
 import pandas as pd
 import numpy as np
 import os
+import argparse
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--subject", type=str, default="001")
+args = parser.parse_args()
 
 # Paths
 PROCESSED_DIR = "../data/processed/"
@@ -11,7 +16,7 @@ FEATURES_DIR = "../data/features/"
 MODEL_DIR = "../models/"
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-SUBJECT_ID = "001"
+SUBJECT_ID = args.subject
 
 # Load data
 cgm_path = os.path.join(PROCESSED_DIR, f"{SUBJECT_ID}_cgm_processed.csv")

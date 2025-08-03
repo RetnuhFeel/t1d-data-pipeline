@@ -1,7 +1,12 @@
 import pandas as pd
 import numpy as np
 import os
+import argparse
 from datetime import datetime, timedelta
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--subject", type=str, default="001")
+args = parser.parse_args()
 
 # Output directories
 RAW_DIR = "../data/raw/"
@@ -10,7 +15,7 @@ os.makedirs(RAW_DIR, exist_ok=True)
 os.makedirs(PROCESSED_DIR, exist_ok=True)
 
 # Parameters
-SUBJECT_ID = "001"
+SUBJECT_ID = args.subject
 START_TIME = datetime(2025, 1, 1, 6)  # Start at 6 AM
 NUM_DAYS = 3
 CGM_INTERVAL_MIN = 5

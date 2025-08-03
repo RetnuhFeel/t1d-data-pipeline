@@ -1,12 +1,17 @@
 import pandas as pd
 import os
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--subject", type=str, default="001")
+args = parser.parse_args()
 
 # File paths
 PROCESSED_DIR = "../data/processed/"
 FEATURES_DIR = "../data/features/"
 os.makedirs(FEATURES_DIR, exist_ok=True)
 
-SUBJECT_ID = "001"
+SUBJECT_ID = args.subject
 
 # Load data
 cgm_path = os.path.join(PROCESSED_DIR, f"{SUBJECT_ID}_cgm_processed.csv")
