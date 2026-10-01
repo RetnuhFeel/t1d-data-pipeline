@@ -1,14 +1,16 @@
 import pandas as pd
 import os
 import argparse
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--subject", type=str, default="001")
 args = parser.parse_args()
 
-# File paths
-PROCESSED_DIR = "../data/processed/"
-FEATURES_DIR = "../data/features/"
+# Paths are resolved relative to the repo root, independent of the working directory
+ROOT = Path(__file__).resolve().parents[1]
+PROCESSED_DIR = ROOT / "data" / "processed"
+FEATURES_DIR = ROOT / "data" / "features"
 os.makedirs(FEATURES_DIR, exist_ok=True)
 
 SUBJECT_ID = args.subject
