@@ -44,11 +44,22 @@ t1d-data-pipeline/
 
 ---
 
+## ⚠️ Important Notes
+
+- **All data is synthetic.** CGM glucose values are independent random draws (`N(120, 30)`), and insulin/carb events are random. There is no real physiological relationship between insulin, carbs and glucose.
+- **Model results are illustrative only.** The regression demonstrates the pipeline mechanics (feature windows, chronological split, baseline comparison); the RMSE values say nothing about real-world glucose prediction and must not be used for any clinical purpose.
+- Runs are **reproducible**: data generation is seeded (`--seed`, default 42).
+
+---
+
 ## 🚀 How to Run the Full Pipeline
 
 ```bash
+pip install -r requirements.txt
 python scripts/run_pipeline.py
 ```
+
+The scripts resolve all paths relative to the repository root, so they can be run from any working directory. The pipeline stops and exits with a non-zero status if any step fails.
 
 ---
 
@@ -59,6 +70,9 @@ You can customize the pipeline with command-line arguments:
 ```bash
 # Run pipeline for a different subject ID
 python scripts/run_pipeline.py --subject 002
+
+# Use a different random seed for the synthetic data
+python scripts/run_pipeline.py --seed 7
 
 # Skip the modeling step
 python scripts/run_pipeline.py --skip-model
@@ -84,8 +98,10 @@ From CGM + insulin logs, the pipeline computes:
 - Model: Linear Regression  
 - Target: `glucose_t+30min`  
 - Features: `glucose_t`, `insulin_last30min`, `carbs_last30min`  
-- Output: RMSE, actual vs. predicted plots  
-- Saved to: `/models/{subject}_glucose_predictions.csv`
+- Split: **chronological** (first 80% train, last 20% test) to avoid leaking neighbouring readings into the test set  
+- Baseline: naive persistence ("glucose in 30 min = glucose now"), reported alongside the model RMSE  
+- Output: RMSE for model and baseline (printed); predictions saved to `models/{subject}_glucose_predictions.csv` (includes a `persistence_baseline` column) for plotting  
+- Note: the notebook `03_modeling_and_prediction.ipynb` is a simplified exploration (glucose-only feature, random split) and does not mirror `scripts/modeling.py`.
 
 ---
 

@@ -3,16 +3,22 @@ import numpy as np
 import os
 import argparse
 from datetime import datetime, timedelta
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--subject", type=str, default="001")
+parser.add_argument("--seed", type=int, default=42, help="Random seed for reproducible synthetic data (default: 42)")
 args = parser.parse_args()
 
-# Output directories
-RAW_DIR = "../data/raw/"
-PROCESSED_DIR = "../data/processed/"
+# Output directories (resolved relative to the repo root, independent of the working directory)
+ROOT = Path(__file__).resolve().parents[1]
+RAW_DIR = ROOT / "data" / "raw"
+PROCESSED_DIR = ROOT / "data" / "processed"
 os.makedirs(RAW_DIR, exist_ok=True)
 os.makedirs(PROCESSED_DIR, exist_ok=True)
+
+# Reproducibility: seed the global NumPy RNG used by the generators below
+np.random.seed(args.seed)
 
 # Parameters
 SUBJECT_ID = args.subject
@@ -65,8 +71,9 @@ def generate_insulin_data():
 
 
 def preprocess_and_save(df, name):
+    df = df.copy()  # don't mutate the caller's dataframe
     df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
-    df.dropna(subset=['timestamp'], inplace=True)
+    df = df.dropna(subset=['timestamp'])
     df = df.sort_values(by='timestamp')
     out_path = os.path.join(PROCESSED_DIR, f"{SUBJECT_ID}_{name}_processed.csv")
     df.to_csv(out_path, index=False)
